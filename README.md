@@ -1,6 +1,8 @@
-# try.cr
+# try.cr [![Build Status](https://travis-ci.org/maiha/try.cr.svg?branch=master)](https://travis-ci.org/maiha/try.cr)
 
 Try monad for CrystalLang
+
+- crystal-0.19.4
 
 ## Usage
 
@@ -8,10 +10,21 @@ Try monad for CrystalLang
 require "try"
 
 i = Try(Int32) { 1 }              # => Success(Int32)
-i.map{|v| v + 1}.value            # => 2
+i.map(&.+ 1).value                # => 2
 
 i = Try(Int32) { raise "error" }  # => Failure(Int32)
-i.map{|v| v + 1}.value            # => Exception("error")
+i.map(&.+ 1).value                # => Exception("error")
+```
+
+## API
+
+```crystal
+def success? : Bool
+def failure? : Bool
+def value : T
+def get : T
+def map(&block : T -> U) : Try(U)
+def recover(&block : Exception -> U) : Try(U)
 ```
 
 ## Installation
