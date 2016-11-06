@@ -1,4 +1,7 @@
 language: crystal
+crystal:
+  - latest
+  - nightly
 sudo: false
 script:
   - make test
