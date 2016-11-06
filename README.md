@@ -2,20 +2,16 @@
 
 Try monad for CrystalLang
 
-- 0.18.x : OK
-- 0.19.x : NG
-
 ## Usage
 
 ```crystal
 require "try"
 
-i = Try(Int32) { 1 }  # => Success(Int32)
-i.map{|v| v + 1}      # i.value # => 2
+i = Try(Int32) { 1 }              # => Success(Int32)
+i.map{|v| v + 1}.value            # => 2
 
 i = Try(Int32) { raise "error" }  # => Failure(Int32)
-i.map{|v| v + 1}      # NOP
-i.value # => Exception("error")
+i.map{|v| v + 1}.value            # => Exception("error")
 ```
 
 ## Installation

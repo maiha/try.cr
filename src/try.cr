@@ -1,9 +1,18 @@
-class Try(T)
-  def self.try : Success(T) | Failure(T)
+abstract class Try(T)
+  def_equals value
+
+  def self.try
     Success(T).new(yield)
   rescue err
     Failure(T).new(err)
   end
+
+  abstract def success? : Bool
+  abstract def failure? : Bool
+  abstract def value : T
+  abstract def get : T
+  abstract def map(&block : T -> U) : Try(U)
+  abstract def recover(&block : Exception -> U) : Try(U)
 end
 
 class Success(T) < Try(T)
@@ -28,7 +37,7 @@ class Success(T) < Try(T)
     Try(U).try { yield(@value) }
   end
 
-  def recover(&block : Exception -> U)
+  def recover(&block : Exception -> T)
     self
   end
 end
@@ -55,7 +64,7 @@ class Failure(T) < Try(T)
     raise @value
   end
 
-  def recover(&block : Exception -> U)
-    yield
+  def recover(&block : Exception -> T)
+    Try(T).try{ yield(@value) }
   end
 end
