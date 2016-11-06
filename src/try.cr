@@ -11,6 +11,7 @@ abstract class Try(T)
   abstract def failure? : Bool
   abstract def value : T
   abstract def get : T
+  abstract def get? : T?
   abstract def failed : Try[Exception]
   abstract def foreach(&block : T -> U) : Nil
   abstract def map(&block : T -> U) : Try(U)
@@ -32,6 +33,10 @@ class Success(T) < Try(T)
   end
   
   def get
+    @value
+  end
+  
+  def get?
     @value
   end
   
@@ -80,6 +85,10 @@ class Failure(T) < Try(T)
 
   def get
     raise @value
+  end
+
+  def get?
+    nil
   end
 
   def recover(&block : Exception -> T)

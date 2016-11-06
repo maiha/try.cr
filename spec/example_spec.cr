@@ -13,14 +13,6 @@ private def text(t_node)
   t_node.map{|n| n.text || raise "text not found" }
 end
 
-private def pure(t_node) : Array(String)
-  array = [] of String
-  t_node.foreach do |n|
-    array << n
-  end
-  return array
-end
-
 private def find_text(html, tag)
   node = parse(html)
   span = find(node, tag)
@@ -52,18 +44,18 @@ end
 describe "Example" do
   it "parse span from valid html" do
     text = find_text(valid_html, "span")
-    pure(text).should eq(["foo"])
+    text.get?.should eq("foo")
   end
 
   it "parse span from broken html" do
     text = find_text(broken_html, "span")
-    pure(text).should eq([] of String)
+    text.get?.should eq(nil)
     text.failed.value.message.should eq("span not found")
   end
 
   it "parse span from empty text html" do
     text = find_text(empty_text_html, "span")
-    pure(text).should eq([] of String)
+    text.get?.should eq(nil)
     text.failed.value.message.should eq("span not found")
   end
 end
