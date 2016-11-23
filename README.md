@@ -1,8 +1,8 @@
 # try.cr [![Build Status](https://travis-ci.org/maiha/try.cr.svg?branch=master)](https://travis-ci.org/maiha/try.cr)
 
-Try monad for CrystalLang
+Try monad for [Crystal](http://crystal-lang.org/).
 
-- crystal-0.19.4
+- crystal: 0.20.0, 0.19.4
 
 ## Usage
 
