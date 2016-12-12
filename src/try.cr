@@ -15,6 +15,7 @@ abstract class Try(T)
   abstract def failed : Try[Exception]
   abstract def foreach(&block : T -> U) : Nil
   abstract def map(&block : T -> U) : Try(U)
+  abstract def flat_map(&block : T -> Try(U)) : Try(U)
   abstract def recover(&block : Exception -> U) : Try(U)
 end
 
@@ -52,6 +53,10 @@ class Success(T) < Try(T)
     Try(U).try { yield(@value) }
   end
 
+  def flat_map(&block : T -> Try(U)) : Success(U) | Failure(U)
+    Try(U).try { yield(@value).get }
+  end
+
   def recover(&block : Exception -> T)
     self
   end
@@ -80,6 +85,10 @@ class Failure(T) < Try(T)
   end
 
   def map(&block : T -> U) : Success(U) | Failure(U)
+    Failure(U).new( @value )
+  end
+
+  def flat_map(&block : T -> Try(U)) : Success(U) | Failure(U)
     Failure(U).new( @value )
   end
 

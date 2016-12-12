@@ -81,6 +81,16 @@ describe Try do
     end
   end
 
+  describe "#flat_map(T,U)" do
+    it "maps the given function to the value [Success]" do
+      success.flat_map{|v| Try(Int32).try{ v + 1 }}.value.should eq(2)
+    end
+
+    it "rewrap value by Failure(U) [Failure]" do
+      failure.flat_map{|v| Try(Int32).try{ v + 1 }}.value.should be_a(Exception)
+    end
+  end
+
   describe "#recover(E,T)" do
     it "returns self [Success]" do
       t = success
