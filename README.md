@@ -9,11 +9,11 @@ Try monad for [Crystal](http://crystal-lang.org/).
 ```crystal
 require "try"
 
-i = Try(Int32) { 1 }              # => Success(Int32)
-i.map(&.+ 1).value                # => 2
+i = Try(Int32).try { 1 }              # => Success(Int32)
+i.map(&.+ 1).value                    # => 2
 
-i = Try(Int32) { raise "error" }  # => Failure(Int32)
-i.map(&.+ 1).value                # => Exception("error")
+i = Try(Int32).try { raise "error" }  # => Failure(Int32)
+i.map(&.+ 1).value                    # => Exception("error")
 ```
 
 ## API
