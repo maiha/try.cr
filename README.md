@@ -2,7 +2,7 @@
 
 Try monad for [Crystal](http://crystal-lang.org/).
 
-- crystal: 0.20.3
+- crystal: 0.20.4
 
 ## Usage
 
