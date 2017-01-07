@@ -39,7 +39,7 @@ Add this to your application's `shard.yml`:
 dependencies:
   try:
     github: maiha/try.cr
-    version: 0.2.1
+    version: 0.2.2
 ```
 
 ## Development
