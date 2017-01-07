@@ -71,6 +71,20 @@ describe Try do
     end
   end
 
+  describe "#foreach" do
+    it "yield with the value [Success]" do
+      got = nil
+      success.foreach{|v| got = v}
+      got.should eq(success.get)
+    end
+
+    it "nop [Failure]" do
+      got = nil
+      failure.foreach{|v| got = v}
+      got.should eq(nil)
+    end
+  end
+
   describe "#map(T,U)" do
     it "maps the given function to the value [Success]" do
       success.map(&.+ 1).value.should eq(2)
@@ -91,7 +105,7 @@ describe Try do
     end
   end
 
-  describe "#recover(E,T)" do
+  describe "#recover" do
     it "returns self [Success]" do
       t = success
       t.recover{|e| 0}.should eq(t)

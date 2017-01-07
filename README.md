@@ -28,7 +28,7 @@ def failed : Try[Exception]
 def foreach(&block : T -> U) : Nil
 def map(&block : T -> U) : Try(U)
 def flat_map(&block : T -> Try(U)) : Try(U)
-def recover(&block : Exception -> U) : Try(U)
+def recover(&block : Exception -> T) : Try(T)
 ```
 
 ## Installation
