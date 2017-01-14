@@ -12,7 +12,7 @@ abstract class Try(T)
   abstract def value : T
   abstract def get : T
   abstract def get? : T?
-  abstract def failed : Try[Exception]
+  abstract def failed : Try(Exception)
   abstract def foreach(&block : T -> U) : Nil forall U
   abstract def map(&block : T -> U) : Try(U) forall U
   abstract def flat_map(&block : T -> Try(U)) : Try(U) forall U
