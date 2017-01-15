@@ -4,4 +4,9 @@ version: 0.2.2
 authors:
   - maiha <maiha@wota.jp>
 
+dependencies:
+  val:
+    github: maiha/val.cr
+    version: 0.2.0
+
 license: MIT

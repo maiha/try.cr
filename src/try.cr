@@ -1,3 +1,5 @@
+require "val"
+
 abstract class Try(T)
   def_equals value
 
@@ -25,21 +27,10 @@ class Success(T) < Try(T)
   def initialize(@value : T)
   end
 
-  def success? : Bool
-    true
-  end
-  
-  def failure? : Bool
-    false
-  end
-  
-  def get : T
-    @value
-  end
-  
-  def get? : T?
-    @value
-  end
+  val success?  = true
+  val failure?  = false
+  val get       = @value
+  val get? : T? = @value
   
   def failed : Try(Exception)
     Failure(Exception).new(Exception.new("can't cast #{@value.class} to Exception"))
@@ -68,21 +59,14 @@ class Failure(T) < Try(T)
   def initialize(@value : Exception)
   end
 
-  def success? : Bool
-    false
-  end
-  
-  def failure? : Bool
-    true
-  end
-  
+  val success? = false
+  val failure? = true
+
   def get : T
     raise @value
   end
 
-  def get? : T?
-    nil
-  end
+  val get? : T? = nil
 
   def failed : Try(Exception)
     Failure(Exception).new(@value)
