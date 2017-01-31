@@ -61,6 +61,16 @@ describe Try do
     end
   end
 
+  describe "#get?" do
+    it "returns the value [Success]" do
+      success.get?.should eq(1)
+    end
+
+    it "returns nil [Failure]" do
+      failure.get?.should eq(nil)
+    end
+  end
+
   describe "#value" do
     it "returns the value [Success]" do
       success.value.should eq(1)
