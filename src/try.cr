@@ -13,6 +13,8 @@ abstract class Try(T)
   abstract def get : T
   abstract def get? : T?
   abstract def failed : Try(Exception)
+  abstract def err : Exception
+  abstract def err? : Exception?
   abstract def foreach(&block : T -> U) : Nil forall U
   abstract def map(&block : T -> U) : Try(U) forall U
   abstract def flat_map(&block : T -> Try(U)) : Try(U) forall U
@@ -39,6 +41,14 @@ class Success(T) < Try(T)
   
   def get? : T?
     @value
+  end
+  
+  def err : Exception
+    raise "not failed"
+  end
+  
+  def err? : Exception?
+    nil
   end
   
   def failed : Try(Exception)
@@ -84,6 +94,14 @@ class Failure(T) < Try(T)
     nil
   end
 
+  def err : Exception
+    @value
+  end
+  
+  def err? : Exception?
+    @value
+  end
+  
   def failed : Try(Exception)
     Failure(Exception).new(@value)
   end

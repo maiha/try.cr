@@ -71,6 +71,28 @@ describe Try do
     end
   end
 
+  describe "#err" do
+    it "raises the exception [Success]" do
+      expect_raises(Exception) {
+        success.err
+      }
+    end
+
+    it "returns the exception [Failure]" do
+      failure.err.should be_a(TryError)
+    end
+  end
+
+  describe "#err?" do
+    it "returns nil [Success]" do
+      success.err?.should eq(nil)
+    end
+
+    it "returns the exception [Failure]" do
+      failure.err.should be_a(TryError)
+    end
+  end
+
   describe "#value" do
     it "returns the value [Success]" do
       success.value.should eq(1)

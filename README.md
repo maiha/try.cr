@@ -10,9 +10,15 @@ Try monad for [Crystal](http://crystal-lang.org/).
 require "try"
 
 i = Try(Int32).try { 1 }              # => Success(Int32)
+i.get                                 # => 1
+i.err                                 # raises "not failed"
+i.value                               # => 1
 i.map(&.+ 1).value                    # => 2
 
 i = Try(Int32).try { raise "error" }  # => Failure(Int32)
+i.get                                 # raises "error"
+i.err                                 # => Exception("error")
+i.value                               # => Exception("error")
 i.map(&.+ 1).value                    # => Exception("error")
 ```
 
@@ -24,6 +30,8 @@ def failure? : Bool
 def value : T
 def get : T
 def get? : T?
+def err : Exception
+def err? : Exception?
 def failed : Try(Exception)
 def foreach(&block : T -> U) : Nil
 def map(&block : T -> U) : Try(U)
