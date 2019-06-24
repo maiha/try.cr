@@ -29,6 +29,23 @@ describe Try do
     end
   end
 
+  describe ".sequence" do
+    it "wraps success as Success" do
+      i = Try(Int32).sequence {
+        [ Try(Int32).try { 1 },Try(Int32).try { 2 },Try(Int32).try { 3 }]
+      }
+      i.should be_a(Success(Enumerable(Int32)))
+      i.get.should eq([1,2,3])
+    end
+
+    it "captures failure as Failure" do
+      i = Try(Int32).sequence {
+        [ Try(Int32).try { 1 },Try(Int32).try { raise error },Try(Int32).try { 3 }]
+      }
+      i.should be_a(Failure(Enumerable(Int32)))
+    end
+  end
+
   describe "#success?" do
     it "returns true [Success]" do
       success.success?.should be_true

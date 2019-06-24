@@ -7,6 +7,14 @@ abstract class Try(T)
     Failure(T).new(err)
   end
 
+  def self.sequence(&f : -> Enumerable(Try(T))) : Try(Enumerable(T)) forall T
+    Success(Enumerable(T)).new(yield.reduce([] of T) { |acc, t|
+      acc << t.get
+    })
+  rescue e
+    Failure(Enumerable(T)).new e
+  end
+
   abstract def success? : Bool
   abstract def failure? : Bool
   abstract def value : T
