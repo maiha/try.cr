@@ -3,4 +3,4 @@ crystal:
   - latest
 sudo: false
 script:
-  - make test
+  - make ci

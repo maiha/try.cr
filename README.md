@@ -2,7 +2,7 @@
 
 Try monad for [Crystal](http://crystal-lang.org/).
 
-- crystal: 0.20.5
+- crystal: 0.27.2 0.31.1 0.32.1 0.33.0 0.34.0
 
 ## Usage
 
@@ -53,7 +53,7 @@ dependencies:
 ## Development
 
 ```shell
-make test
+make ci
 ```
 
 ## Contributing
