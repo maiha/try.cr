@@ -11,6 +11,7 @@ module Try(T)
     abstract def map(&block : T -> U) : Failure(T) | Success(T) forall U
     abstract def flat_map(&block : T -> Failure(T) | Success(T)) : Failure(T) | Success(T) forall U
     abstract def recover(&block : Exception -> T) : Failure(T) | Success(T)
+    abstract def or(&block : Exception -> U) : Failure(T|U) | Success(T|U) forall U
   end
 
   def self.try : Failure(T) | Success(T)
@@ -71,6 +72,10 @@ class Success(T)
   def recover(&block : Exception -> T) : Failure(T) | Success(T)
     self
   end
+
+  def or(&block : Exception -> U) : Failure(T|U) | Success(T|U) forall U
+    Try(T|U).try{ @value }
+  end
 end
 
 class Failure(T)
@@ -123,5 +128,9 @@ class Failure(T)
 
   def recover(&block : Exception -> T) : Failure(T) | Success(T)
     Try(T).try{ yield(@value) }
+  end
+
+  def or(&block : Exception -> U) : Failure(T|U) | Success(T|U) forall U
+    Try(T|U).try{ yield(@value) }
   end
 end

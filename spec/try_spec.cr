@@ -155,4 +155,18 @@ describe Try do
       end
     end
   end
+
+  describe "#or" do
+    it "returns the value as union types [Success]" do
+      try = Try(Int32).try{ 1 }
+      try.or{ "foo" }.get?.should eq(1)
+      try.or{ "foo" }.should be_a(Success(Int32 | String))
+    end
+
+    it "returns the yielded value as union types [Failure]" do
+      try = Try(Int32).try{ raise "xxx" }
+      try.or{ "foo" }.get?.should eq("foo")
+      try.or{ "foo" }.should be_a(Success(Int32 | String))
+    end
+  end
 end

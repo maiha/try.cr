@@ -1,6 +1,19 @@
-#!/bin/zsh
+#!/bin/bash
 
 set -eu
 
-for x in 0.27.2 0.33.0 0.35.1 0.36.1; (echo $x; crenv local $x && make ci)
+function test() {
+  local version=$1
+  echo "----------------------------------------------------------------------"
+  echo "[$version]"
+  echo "----------------------------------------------------------------------"
+  
+  crenv local $version
+  make ci
+}
+
+test 0.27.2
+test 0.33.0
+test 0.35.1
+test 0.36.1
 
