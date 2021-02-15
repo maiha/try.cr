@@ -19,6 +19,48 @@ module Try(T)
   rescue err
     Failure(T).new(err)
   end
+
+  # Expressions:
+  #   x : Success
+  #     x + 1
+  #
+  # TypeDeclaration:
+  #   x : Success = x + 1
+  macro match(try, &block)
+    {% if block.body.is_a?(Expressions) %}
+      {% exps = block.body.expressions %}
+    {% elsif block.body.is_a?(TypeDeclaration) %}
+      {% exps = [block.body] %}
+    {% else %}
+      {% raise "Try.match expects Expression, but got #{block.body.class_name}" %}
+    {% end %}
+
+    {% if exps %}
+      case {{try}}
+      {% for exp in exps %}
+        {% if exp.is_a?(TypeDeclaration) %}
+          {% if exp.type.stringify == "Success" %}
+            when ::Success
+              {{exp.var}} = {{try}}.get
+            {% if exp.value %}
+              {{exp.value}}
+            {% end %}
+          {% elsif exp.type.stringify == "Failure" %}
+            when ::Failure
+              {{exp.var}} = {{try}}.err
+            {% if exp.value %}
+              {{exp.value}}
+            {% end %}
+          {% else %}
+            {% raise "Try.match expects Success or Failure, but got #{exp.type}" %}
+          {% end %}
+        {% else %}
+              {{exp}}
+        {% end %}
+      {% end %}
+      end
+    {% end %}
+  end
 end
 
 class Success(T)

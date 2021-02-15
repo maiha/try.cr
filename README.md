@@ -30,13 +30,25 @@ def failure? : Bool
 def value : T
 def get : T
 def get? : T?
+def failed : Failure(T)
 def err : Exception
 def err? : Exception?
-def failed : Try(Exception)
-def foreach(&block : T -> U) : Nil
-def map(&block : T -> U) : Try(U)
-def flat_map(&block : T -> Try(U)) : Try(U)
-def recover(&block : Exception -> T) : Try(T)
+def map(&block : T -> U) : Failure(T) | Success(T) forall U
+def flat_map(&block : T -> Failure(T) | Success(T)) : Failure(T) | Success(T) forall U
+def recover(&block : Exception -> T) : Failure(T) | Success(T)
+def or(&block : Exception -> U) : Failure(T|U) | Success(T|U) forall U
+```
+
+#### `Try.match` (experimental)
+
+Syntax sugar for `case` statements that specialize in getting `Success` and `Failure` values like extractors in Scala.
+
+```crystal
+try = Try(Int32).try { 1 }
+Try.match(try) {
+  v : Success = puts "got #{v}"
+  e : Failure = raise e
+}
 ```
 
 ## Installation
