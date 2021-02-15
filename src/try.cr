@@ -1,27 +1,28 @@
-abstract class Try(T)
-  def_equals value
+module Try(T)
+  module Interface
+    abstract def success? : Bool
+    abstract def failure? : Bool
+    abstract def get : T
+    abstract def get? : T?
+    abstract def failed : Failure(T)
+    abstract def err : Exception
+    abstract def err? : Exception?
+    abstract def foreach(&block : T -> U) : Nil forall U
+    abstract def map(&block : T -> U) : Failure(T) | Success(T) forall U
+    abstract def flat_map(&block : T -> Failure(T) | Success(T)) : Failure(T) | Success(T) forall U
+    abstract def recover(&block : Exception -> T) : Failure(T) | Success(T)
+  end
 
-  def self.try
+  def self.try : Failure(T) | Success(T)
     Success(T).new(yield)
   rescue err
     Failure(T).new(err)
   end
-
-  abstract def success? : Bool
-  abstract def failure? : Bool
-  abstract def value : T
-  abstract def get : T
-  abstract def get? : T?
-  abstract def failed : Try(Exception)
-  abstract def err : Exception
-  abstract def err? : Exception?
-  abstract def foreach(&block : T -> U) : Nil forall U
-  abstract def map(&block : T -> U) : Try(U) forall U
-  abstract def flat_map(&block : T -> Try(U)) : Try(U) forall U
-  abstract def recover(&block : Exception -> T) : Try(T)
 end
 
-class Success(T) < Try(T)
+class Success(T)
+  def_equals value
+
   getter :value
 
   def initialize(@value : T)
@@ -51,30 +52,32 @@ class Success(T) < Try(T)
     nil
   end
   
-  def failed : Try(Exception)
-    Failure(Exception).new(Exception.new("can't cast #{@value.class} to Exception"))
+  def failed : Failure(T)
+    Failure(T).new(Exception.new("can't cast #{@value.class} to Exception"))
   end
   
   def foreach(&block : T -> U) : Nil forall U
     yield(@value)
   end
 
-  def map(&block : T -> U) : Try(U) forall U
+  def map(&block : T -> U) : Failure(U) | Success(U) forall U
     Try(U).try { yield(@value) }
   end
 
-  def flat_map(&block : T -> Try(U)) : Try(U) forall U
+  def flat_map(&block : T -> Failure(U) | Success(U)) : Failure(U) | Success(U) forall U
     Try(U).try { yield(@value).get }
   end
 
-  def recover(&block : Exception -> T) : Try(T)
+  def recover(&block : Exception -> T) : Failure(T) | Success(T)
     self
   end
 end
 
-class Failure(T) < Try(T)
-  getter :value
+class Failure(T)
+  def_equals value
 
+  getter value
+  
   def initialize(@value : Exception)
   end
 
@@ -102,23 +105,23 @@ class Failure(T) < Try(T)
     @value
   end
   
-  def failed : Try(Exception)
-    Failure(Exception).new(@value)
+  def failed : Failure(T)
+    Failure(T).new(@value)
   end
 
   def foreach(&block : T -> U) : Nil forall U
     nil
   end
 
-  def map(&block : T -> U) : Try(U) forall U
+  def map(&block : T -> U) : Failure(U) | Success(U) forall U
     Failure(U).new( @value )
   end
 
-  def flat_map(&block : T -> Try(U)) : Try(U) forall U
+  def flat_map(&block : T -> Failure(U) | Success(U)) : Failure(U) | Success(U) forall U
     Failure(U).new( @value )
   end
 
-  def recover(&block : Exception -> T) : Try(T)
+  def recover(&block : Exception -> T) : Failure(T) | Success(T)
     Try(T).try{ yield(@value) }
   end
 end
