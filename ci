@@ -7,9 +7,8 @@ function test() {
   echo "----------------------------------------------------------------------"
   echo "[$version]"
   echo "----------------------------------------------------------------------"
-  
-  crenv local $version
-  make ci
+
+  docker run --rm -v "$PWD:/app" -w /app crystallang/crystal:$version make ci
 }
 
 test 0.27.2
