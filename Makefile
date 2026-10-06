@@ -1,8 +1,9 @@
 SHELL=/bin/bash
+DOCKER=docker run --rm -v "$PWD:/app" -w /app crystallang/crystal:1.21.1
 
 .PHONY : ci
 ci: check_version_mismatch
-	@crystal spec --fail-fast
+	$(DOCKER) crystal spec --fail-fast
 
 .PHONY : check_version_mismatch
 check_version_mismatch: shard.yml README.md

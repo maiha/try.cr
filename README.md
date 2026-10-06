@@ -1,4 +1,4 @@
-# try.cr [![Build Status](https://travis-ci.org/maiha/try.cr.svg?branch=master)](https://travis-ci.org/maiha/try.cr)
+# try.cr
 
 Try monad for [Crystal](http://crystal-lang.org/).
 
